@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: cover;
+            background-position: center;
+            display: none;
+            transition: all 0.5s ease;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .content {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            background: linear-gradient(135deg, rgba(71, 118, 230, 0.8), rgba(142, 84, 233, 0.8));
+        }
+        
+        .title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .highlight {
+            background-color: #ffdd57;
+            color: #333;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .book-image {
+            float: right;
+            margin: 0 0 20px 20px;
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+        }
+        
+        .profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+        }
+        
+        .profile-text {
+            flex: 1;
+        }
+        
+        .book-details {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .control-btn {
+            padding: 10px 20px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-btn:hover {
+            background-color: #ff5252;
+            transform: scale(1.05);
+        }
+        
+        .nav-dot {
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background-color: #fff;
+            transform: scale(1.2);
+        }
+        
+        .nav-dots {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .agenda-item {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .agenda-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .agenda-item:before {
+            content: "•";
+            color: #ffdd57;
+            font-size: 1.5em;
+            position: absolute;
+            left: 10px;
+        }
+        
+        .kahoot-section {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #ffdd57;
+        }
+        
+        .quote {
+            font-style: italic;
+            border-left: 4px solid #ffdd57;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+        }
+        
+        .vilnius-info {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .vilnius-images {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .vilnius-image {
+            width: 30%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            border: 3px solid white;
+            transition: transform 0.3s ease;
+        }
+        
+        .vilnius-image:hover {
+            transform: scale(1.05);
+        }
+        
+        ul li {
+            margin-bottom: 10px;
+            list-style-type: none;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        ul li:before {
+            content: "✓";
+            color: #ffdd57;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .book-option {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffdd57;
+            transition: transform 0.3s ease;
+        }
+        
+        .book-option:hover {
+            transform: scale(1.02);
+        }
+        
+        .color-shift {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.8), rgba(255, 107, 198, 0.8));
+        }
+        
+        .color-shift-2 {
+            background: linear-gradient(135deg, rgba(252, 92, 125, 0.8), rgba(106, 130, 251, 0.8));
+        }
+        
+        .color-shift-3 {
+            background: linear-gradient(135deg, rgba(130, 88, 159, 0.8), rgba(232, 154, 80, 0.8));
+        }
+        
+        .color-shift-4 {
+            background: linear-gradient(135deg, rgba(65, 179, 163, 0.8), rgba(1, 139, 201, 0.8));
+        }
+        
+        .welcome-animation {
+            animation: fadeInUp 1.5s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Welcome & Logo -->
+        <div class="slide active" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-4-lg.png');">
+            <div class="content welcome-animation">
+                <div class="logo-container">
+                    <img src="/api/placeholder/200/200" alt="Ctrl + Alt + Read Logo" class="logo">
+                    <h2 class="subtitle">Est. 2025 | Vilnius, Lithuania</h2>
+                </div>
+                <h1 class="title">Ctrl + Alt + Read 📚</h1>
+                <h2 class="subtitle">Welcome to our Book Club!</h2>
+                <p class="text">
+                    <span class="highlight">Date:</span> March 3rd, 2025<br>
+                    <span class="highlight">Time:</span> 5:00 PM – 7:00 PM<br>
+                    <span class="highlight">Venue:</span> Depeche Coffee (Gedimino pr. 2)
+                </p>
+                <p class="text">Join us for an exciting journey through "The Midnight Library" by Matt Haig!</p>
+            </div>
+        </div>
+        
+        <!-- Slide 2: About Our Vilnius Community -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-6-lg.png');">
+            <div class="content color-shift">
+                <h1 class="title">Our Vilnius Literary Community</h1>
+                <p class="text">Ctrl + Alt + Read is Vilnius's newest English-language book club, bringing together locals and expats who share a passion for literature.</p>
+                
+                <div class="vilnius-info">
+                    <h3>Why Vilnius?</h3>
+                    <p class="text">With its rich literary history and UNESCO City of Literature status, Vilnius provides the perfect backdrop for our book discussions.</p>
+                    
+                    <div class="vilnius-images">
+                        <img src="/api/placeholder/150/120" alt="Vilnius Old Town" class="vilnius-image">
+                        <img src="/api/placeholder/150/120" alt="Vilnius University Library" class="vilnius-image">
+                        <img src="/api/placeholder/150/120" alt="Lithuanian Writers Union" class="vilnius-image">
+                    </div>
+                </div>
+                
+                <p class="text">Our community brings together readers from all over Lithuania and beyond, creating connections through our shared love of books.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 3: About Me -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-3-lg.png');">
+            <div class="content color-shift-2">
+                <h1 class="title">About Your Host</h1>
+                <div class="profile">
+                    <img src="/api/placeholder/150/150" alt="Profile Picture" class="profile-pic">
+                    <div class="profile-text">
+                        <p class="text">Hello! I'm [Your Name], the founder of Ctrl + Alt + Read.</p>
+                        <p class="text">I've been an avid reader for over 10 years with a special love for literary fiction and sci-fi.</p>
+                        <p class="text">My goal is to create a welcoming space where we can all share our love of reading!</p>
+                    </div>
+                </div>
+                <p class="text">3 books that changed my life:</p>
+                <ul>
+                    <li class="text">"To Kill a Mockingbird" by Harper Lee</li>
+                    <li class="text">"1984" by George Orwell</li>
+                    <li class="text">"The Alchemist" by Paulo Coelho</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Today's Agenda -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-5-lg.png');">
+            <div class="content color-shift-3">
+                <h1 class="title">Today's Agenda</h1>
+                <div class="agenda-item">
+                    <h3>Welcome & Introductions (15 min)</h3>
+                    <p class="text">Get to know your fellow readers</p>
+                </div>
+                <div class="agenda-item">
+                    <h3>Book Club Format & Expectations (10 min)</h3>
+                    <p class="text">How our meetings work</p>
+                </div>
+                <div class="agenda-item">
+                    <h3>The Midnight Library Discussion (40 min)</h3>
+                    <p class="text">Deep dive into themes and characters</p>
+                </div>
+                <div class="agenda-item">
+                    <h3>Interactive Kahoot Quiz (20 min)</h3>
+                    <p class="text">Test your knowledge and have fun!</p>
+                </div>
+                <div class="agenda-item">
+                    <h3>Next Book Selection & Wrap-up (15 min)</h3>
+                    <p class="text">Vote on our next read</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Book Club Format -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-2-lg.png');">
+            <div class="content color-shift-4">
+                <h1 class="title">Our Book Club Format</h1>
+                <p class="text">At Ctrl + Alt + Read, we believe in:</p>
+                <ul>
+                    <li class="text"><strong>Inclusivity:</strong> All reading levels and preferences welcome</li>
+                    <li class="text"><strong>Respect:</strong> All opinions are valid and valued</li>
+                    <li class="text"><strong>Engagement:</strong> Active participation makes meetings more fun</li>
+                    <li class="text"><strong>Growth:</strong> Reading outside our comfort zones</li>
+                </ul>
+                <p class="text">We meet monthly, with PDF copies shared in our community group.</p>
+                <p class="text">Bring your thoughts, questions, and an open mind!</p>
+            </div>
+        </div>
+        
+        <!-- Slide 6: The Midnight Library -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-1-lg.png');">
+            <div class="content">
+                <h1 class="title">Today's Book</h1>
+                <div class="book-details">
+                    <div>
+                        <h2 class="subtitle">The Midnight Library</h2>
+                        <h3>by Matt Haig</h3>
+                        <p class="text">Published in 2020</p>
+                        <p class="text">Winner of Goodreads Choice Award for Fiction</p>
+                        <p class="text">A novel about regret, possibility, and the infinite potential of life</p>
+                    </div>
+                    <img src="/api/placeholder/200/300" alt="The Midnight Library Book Cover" class="book-image">
+                </div>
+                <div class="quote">
+                    "Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived."
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Discussion Questions -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/abstract-7-lg.png');">
+            <div class="content color-shift">
+                <h1 class="title">Discussion Questions</h1>
+                <ol>
+                    <li class="text">What did you think of the concept of the Midnight Library?</li>
+                    <li class="text">How did Nora's character development throughout the novel resonate with you?</li>
+                    <li class="text">Which of Nora's parallel lives was most interesting to you, and why?</li>
+                    <li class="text">How did the book's exploration of regret affect your perspective on your own choices?</li>
+                    <li class="text">Did you find the ending satisfying? Why or why not?</li>
+                    <li class="text">What do you think Matt Haig is trying to say about happiness and fulfillment?</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Kahoot Quiz -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/gradient-1-lg.png');">
+            <div class="content color-shift-2">
+                <h1 class="title">Book Club Kahoot Quiz! 🎮</h1>
+                <p class="text">It's time for our interactive quiz! Get ready to test your knowledge about:</p>
+                <ul>
+                    <li class="text">Reading habits and fun book facts</li>
+                    <li class="text">Literary knowledge</li>
+                    <li class="text">The Midnight Library</li>
+                    <li class="text">General book trivia</li>
+                </ul>
+                <div class="kahoot-section">
+                    <h3>How to join:</h3>
+                    <p class="text">1. Take out your smartphone</p>
+                    <p class="text">2. Go to kahoot.it</p>
+                    <p class="text">3. Enter the game pin: [PIN]</p>
+                    <p class="text">4. Choose a nickname</p>
+                </div>
+                <p class="text">Winner gets first pick for next month's book selection! 🏆</p>
+            </div>
+        </div>
+        
+        <!-- Slide 9: Next Month's Selection -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/gradient-2-lg.png');">
+            <div class="content color-shift-3">
+                <h1 class="title">Next Month's Book Options</h1>
+                <div class="book-option">
+                    <p><strong>Option 1:</strong> "Project Hail Mary" by Andy Weir</p>
+                    <p><em>A lone astronaut must save humanity from extinction in this sci-fi thriller.</em></p>
+                </div>
+                <div class="book-option">
+                    <p><strong>Option 2:</strong> "Klara and the Sun" by Kazuo Ishiguro</p>
+                    <p><em>A look at our changing world through the eyes of an unforgettable AI.</em></p>
+                </div>
+                <div class="book-option">
+                    <p><strong>Option 3:</strong> "Educated" by Tara Westover</p>
+                    <p><em>A memoir about surviving childhood among survivalists and the pursuit of education.</em></p>
+                </div>
+                <div class="book-option">
+                    <p><strong>Option 4:</strong> "The Song of Achilles" by Madeline Miller</p>
+                    <p><em>A reimagining of Homer's Iliad told from Patroclus's perspective.</em></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 10: Vilnius Book Spots -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/gradient-3-lg.png');">
+            <div class="content color-shift-4">
+                <h1 class="title">Best Reading Spots in Vilnius</h1>
+                <p class="text">Between meetings, visit these literary havens in our beautiful city:</p>
+                
+                <div class="book-option">
+                    <p><strong>Mint Vinetu</strong> - Cozy bookstore café in the Old Town</p>
+                    <p><em>Šv. Ignoto g. 16</em></p>
+                </div>
+                
+                <div class="book-option">
+                    <p><strong>Vilnius University Library</strong> - Historic reading rooms</p>
+                    <p><em>Universiteto g. 3</em></p>
+                </div>
+                
+                <div class="book-option">
+                    <p><strong>Bernardinai Garden</strong> - Perfect outdoor reading spot</p>
+                    <p><em>B. Radvilaitės g.</em></p>
+                </div>
+                
+                <div class="book-option">
+                    <p><strong>Bookstore "Akademinė knyga"</strong> - Great English book selection</p>
+                    <p><em>Universiteto g. 4</em></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 11: Stay Connected -->
+        <div class="slide" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/placeholder-imgs/0.1.0/gradient-4-lg.png');">
+            <div class="content">
+                <h1 class="title">Stay Connected!</h1>
+                <p class="text">Join our online community to keep the conversation going:</p>
+                <ul>
+                    <li class="text"><strong>Instagram:</strong> @CtrlAltRead</li>
+                    <li class="text"><strong>Goodreads Group:</strong> Ctrl+Alt+Read Book Club</li>
+                    <li class="text"><strong>WhatsApp Group:</strong> Scan the QR code to join our discussions</li>
+                </ul>
+                <div style="text-align: center; margin-top: 20px;">
+                    <img src="/api/placeholder/150/150" alt="WhatsApp QR Code" style="display: inline-block; border: 5px solid white; border-radius: 10px;">
+                </div>
+                <p class="text" style="text-align: center; margin-top: 20px;">
+                    Thank you for being part of our literary community!
+                </p>
+            </div>
+        </div>
+        
+        <!-- Navigation Dots -->
+        <div class="nav-dots">
+            <span class="nav-dot active" onclick="showSlide(0)"></span>
+            <span class="nav-dot" onclick="showSlide(1)"></span>
+            <span class="nav-dot" onclick="showSlide(2)"></span>
+            <span class="nav-dot" onclick="showSlide(3)"></span>
+            <span class="nav-dot" onclick="showSlide(4)"></span>
+            <span class="nav-dot" onclick="showSlide(5)"></span>
+            <span class="nav-dot" onclick="showSlide(6)"></span>
+            <span class="nav-dot" onclick="showSlide(7)"></span>
+            <span class="nav-dot" onclick="showSlide(8)"></span>
+            <span class="nav-dot" onclick="showSlide(9)"></span>
+            <span class="nav-dot" onclick="showSlide(10)"></span>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-btn" onclick="prevSlide()">Previous</button>
+            <button class="control-btn" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.nav-dot');
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = n;
+            
+            if (currentSlide >= slides.length) {
+                currentSlide = 0;
+            }
+            if (currentSlide < 0) {
+                currentSlide = slides.length - 1;
+            }
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
